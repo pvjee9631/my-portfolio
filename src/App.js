@@ -139,13 +139,16 @@ function App() {
         </p>
         <div className="portfolio__grid">
           <div className="portfolio__card">
-            <img src="/assets/project-1.jpg" alt="portfolio" />
+            <img src="/assets/project3.jpg" alt="portfolio" />
+            <h3>Emergency_Dashboard</h3>
           </div>
           <div className="portfolio__card">
-            <img src="/assets/project-2.jpg" alt="portfolio" />
+            <img src="/assets/project2.jpg" alt="portfolio" />
+            <h3>Trip mark</h3>
           </div>
           <div className="portfolio__card">
-            <img src="/assets/project-3.jpg" alt="portfolio" />
+            <img src="/assets/project1.jpg" alt="portfolio" />
+            <h3>ABS建設会社 公式サイト</h3>
           </div>
         </div>
       </section>
