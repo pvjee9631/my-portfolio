@@ -422,6 +422,7 @@ nav {
   font-weight: 500;
   margin-top: 1rem;
   transition: all 0.3s ease;
+  font-size: 1rem;
 }
 
 .form__status.success {
@@ -434,6 +435,12 @@ nav {
   background: #fee2e2;
   color: #991b1b;
   border: 1px solid #fecaca;
+}
+
+/* Ensure emojis display correctly */
+.form__status::before {
+  content: '';
+  margin-right: 0.5rem;
 }
 
 /* Mobile Styles */

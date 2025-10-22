@@ -11,7 +11,13 @@ function App() {
   });
   const [formStatus, setFormStatus] = useState('');
 
-  // ... existing toggleMenu and toggleTheme functions ...
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -26,40 +32,40 @@ function App() {
     setFormStatus('Sending...');
 
     try {
-      const response = await fetch('/.netlify/functions/contact', {
+      const response = await fetch('https://formspree.io/f/movkoaeo', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          _subject: `New portfolio message from ${formData.name}`
+        })
       });
 
-      const result = await response.json();
+      console.log('Formspree response status:', response.status);
 
       if (response.ok) {
-        setFormStatus(result.message);
+        setFormStatus('✅ Message sent successfully! Thank you!');
         setFormData({ name: '', email: '', message: '' });
-        
-        // 5 секундын дараа status-ыг арилгах
-        setTimeout(() => setFormStatus(''), 5000);
       } else {
-        setFormStatus(`Error: ${result.error}`);
+        const result = await response.json();
+        setFormStatus('❌ Error sending message. Please try again.');
+        console.error('Formspree error:', result);
       }
+      
+      setTimeout(() => setFormStatus(''), 5000);
     } catch (error) {
-      setFormStatus('Error sending message. Please try again.');
       console.error('Form submission error:', error);
+      setFormStatus('❌ Network error. Please try again later.');
+      setTimeout(() => setFormStatus(''), 5000);
     }
-  };
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
   };
 
   useEffect(() => {
-    // Theme-г body attribute дээр тохируулах
     if (isDarkMode) {
       document.body.setAttribute('data-theme', 'dark');
     } else {
@@ -105,19 +111,19 @@ function App() {
 
       {/* Navigation */}
       <nav>
-    <div className="nav__bar">
-      <div className="nav__menu__btn" id="menu-btn" onClick={toggleMenu}>
-        <i className="ri-menu-3-line"></i>
-      </div>
-    </div>
-    <ul className={`nav__links ${isMenuOpen ? 'active' : ''}`} id="nav-links">
-      <li><a href="#home" onClick={() => setIsMenuOpen(false)}>Home</a></li>
-      <li><a href="#about" onClick={() => setIsMenuOpen(false)}>About</a></li>
-      <li><a href="#service" onClick={() => setIsMenuOpen(false)}>Service</a></li>
-      <li><a href="#portfolio" onClick={() => setIsMenuOpen(false)}>Portfolio</a></li>
-      <li><a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a></li>
-    </ul>
-  </nav>
+        <div className="nav__bar">
+          <div className="nav__menu__btn" id="menu-btn" onClick={toggleMenu}>
+            <i className="ri-menu-3-line"></i>
+          </div>
+        </div>
+        <ul className={`nav__links ${isMenuOpen ? 'active' : ''}`} id="nav-links">
+          <li><a href="#home" onClick={() => setIsMenuOpen(false)}>Home</a></li>
+          <li><a href="#about" onClick={() => setIsMenuOpen(false)}>About</a></li>
+          <li><a href="#service" onClick={() => setIsMenuOpen(false)}>Service</a></li>
+          <li><a href="#portfolio" onClick={() => setIsMenuOpen(false)}>Portfolio</a></li>
+          <li><a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a></li>
+        </ul>
+      </nav>
 
       {/* Header Section */}
       <header className="section__container header__container" id="home">
@@ -143,8 +149,8 @@ function App() {
           <h2 className="section__header">Bit About Me</h2>
           <p className="section__description">
             「モンゴル出身で、横浜システム工学院専門学校のデータサイエンス科に在籍しています。
-       フロントエンドからバックエンドまで幅広く学び、救急ダッシュボードというプロジェクトに取り組んでいます。
-       HTML/CSS、JavaScript、PHP+MySQL、Pythonを中心に、ユーザー体験と読みやすいコードを大切にしています。」
+            フロントエンドからバックエンドまで幅広く学び、救急ダッシュボードというプロジェクトに取り組んでいます。
+            HTML/CSS、JavaScript、PHP+MySQL、Pythonを中心に、ユーザー体験と読みやすいコードを大切にしています。」
           </p>
         </div>
       </section>
@@ -177,74 +183,73 @@ function App() {
       </section>
 
       {/* Portfolio Section */}
-      {/* Portfolio Section - Simple Version */}
-    <section className="section__container portfolio__container" id="portfolio">
-      <h2 className="section__header">My Projects</h2>
-      <p className="section__description">
-        Click on projects to view details
-      </p>
-      <div className="portfolio__grid">
-        <a href="https://tripmark.netlify.app" target="_blank" rel="noopener noreferrer" className="portfolio__link">
-          <div className="portfolio__card">
-            <img src="/assets/project2.jpg" alt="Trip Mark" />
-            <h3>Trip Mark</h3>
-          </div>
-        </a>
-        <a href="https://abs-company-spa.netlify.app" target="_blank" rel="noopener noreferrer" className="portfolio__link">
-           <div className="portfolio__card">
-          <img src="/assets/project1.jpg" alt="ABS Construction" />
-          <h3>ABS建設会社 公式サイト</h3>
-          </div>
-        </a>
-        <a href="https://github.com/your-username/emergency-dashboard" target="_blank" rel="noopener noreferrer" className="portfolio__link">
-          <div className="portfolio__card">
-            <img src="/assets/project3.jpg" alt="Emergency Dashboard" />
-            <h3>Emergency Dashboard</h3>
-          </div>
-        </a>
-      </div>
-    </section>
+      <section className="section__container portfolio__container" id="portfolio">
+        <h2 className="section__header">My Projects</h2>
+        <p className="section__description">
+          Click on projects to view details
+        </p>
+        <div className="portfolio__grid">
+          <a href="https://tripmark.netlify.app" target="_blank" rel="noopener noreferrer" className="portfolio__link">
+            <div className="portfolio__card">
+              <img src="/assets/project2.jpg" alt="Trip Mark" />
+              <h3>Trip Mark</h3>
+            </div>
+          </a>
+          <a href="https://abs-company-spa.netlify.app" target="_blank" rel="noopener noreferrer" className="portfolio__link">
+            <div className="portfolio__card">
+              <img src="/assets/project1.jpg" alt="ABS Construction" />
+              <h3>ABS建設会社 公式サイト</h3>
+            </div>
+          </a>
+          <a href="https://github.com/pvjee9631/Emergency_Dashboard" target="_blank" rel="noopener noreferrer" className="portfolio__link">
+            <div className="portfolio__card">
+              <img src="/assets/project3.jpg" alt="Emergency Dashboard" />
+              <h3>Emergency Dashboard</h3>
+            </div>
+          </a>
+        </div>
+      </section>
 
       {/* Contact Section */}
-<section className="section__container contact__container" id="contact">
-  <h2 className="section__header">Contact Me</h2>
-  <form className="contact__form" onSubmit={handleSubmit}>
-    <input 
-      type="text" 
-      name="name"
-      placeholder="Your name" 
-      required 
-      className="form__input"
-      value={formData.name}
-      onChange={handleInputChange}
-    />
-    <input 
-      type="email" 
-      name="email"
-      placeholder="Your email" 
-      required 
-      className="form__input"
-      value={formData.email}
-      onChange={handleInputChange}
-    />
-    <textarea 
-      name="message"
-      placeholder="Your message" 
-      required 
-      className="form__textarea"
-      value={formData.message}
-      onChange={handleInputChange}
-    ></textarea>
-    <button type="submit" className="btn form__btn">
-      Send Message
-    </button>
-    {formStatus && (
-      <div className={`form__status ${formStatus.includes('Error') ? 'error' : 'success'}`}>
-        {formStatus}
-      </div>
-    )}
-  </form>
-</section>
+      <section className="section__container contact__container" id="contact">
+        <h2 className="section__header">Contact Me</h2>
+        <form className="contact__form" onSubmit={handleSubmit}>
+          <input 
+            type="text" 
+            name="name"
+            placeholder="Your name" 
+            required 
+            className="form__input"
+            value={formData.name}
+            onChange={handleInputChange}
+          />
+          <input 
+            type="email" 
+            name="email"
+            placeholder="Your email" 
+            required 
+            className="form__input"
+            value={formData.email}
+            onChange={handleInputChange}
+          />
+          <textarea 
+            name="message"
+            placeholder="Your message" 
+            required 
+            className="form__textarea"
+            value={formData.message}
+            onChange={handleInputChange}
+          ></textarea>
+          <button type="submit" className="btn form__btn">
+            Send Message
+          </button>
+          {formStatus && (
+            <div className={`form__status ${formStatus.includes('❌') ? 'error' : 'success'}`}>
+              {formStatus}
+            </div>
+          )}
+        </form>
+      </section>
 
       <footer className="footer">
         Copyright © 2024 My Portfolio. All rights reserved.
