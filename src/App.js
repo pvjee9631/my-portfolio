@@ -4,7 +4,52 @@ import './styles.css';
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [formStatus, setFormStatus] = useState('');
 
+  // ... existing toggleMenu and toggleTheme functions ...
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormStatus('Sending...');
+
+    try {
+      const response = await fetch('/.netlify/functions/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setFormStatus(result.message);
+        setFormData({ name: '', email: '', message: '' });
+        
+        // 5 секундын дараа status-ыг арилгах
+        setTimeout(() => setFormStatus(''), 5000);
+      } else {
+        setFormStatus(`Error: ${result.error}`);
+      }
+    } catch (error) {
+      setFormStatus('Error sending message. Please try again.');
+      console.error('Form submission error:', error);
+    }
+  };
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -161,29 +206,43 @@ function App() {
     </section>
 
       {/* Contact Section */}
-      <section className="section__container contact__container" id="contact">
+<section className="section__container contact__container" id="contact">
   <h2 className="section__header">Contact Me</h2>
-  <form className="contact__form">
+  <form className="contact__form" onSubmit={handleSubmit}>
     <input 
       type="text" 
+      name="name"
       placeholder="Your name" 
       required 
       className="form__input"
+      value={formData.name}
+      onChange={handleInputChange}
     />
     <input 
       type="email" 
+      name="email"
       placeholder="Your email" 
       required 
       className="form__input"
+      value={formData.email}
+      onChange={handleInputChange}
     />
     <textarea 
+      name="message"
       placeholder="Your message" 
       required 
       className="form__textarea"
+      value={formData.message}
+      onChange={handleInputChange}
     ></textarea>
     <button type="submit" className="btn form__btn">
       Send Message
     </button>
+    {formStatus && (
+      <div className={`form__status ${formStatus.includes('Error') ? 'error' : 'success'}`}>
+        {formStatus}
+      </div>
+    )}
   </form>
 </section>
 
