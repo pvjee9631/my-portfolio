@@ -287,6 +287,19 @@ nav {
   transform: scale(1.05);
 }
 
+.portfolio__link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.portfolio__link .portfolio__card {
+  transition: all 0.3s ease;
+}
+
+.portfolio__link:hover .portfolio__card {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
 /* Contact Form */
 .contact__container {
   text-align: center;

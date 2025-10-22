@@ -132,26 +132,33 @@ function App() {
       </section>
 
       {/* Portfolio Section */}
-      <section className="section__container portfolio__container" id="portfolio">
-        <h2 className="section__header">My Projects</h2>
-        <p className="section__description">
-          Loading projects...
-        </p>
-        <div className="portfolio__grid">
+      {/* Portfolio Section - Simple Version */}
+    <section className="section__container portfolio__container" id="portfolio">
+      <h2 className="section__header">My Projects</h2>
+      <p className="section__description">
+        Click on projects to view details
+      </p>
+      <div className="portfolio__grid">
+        <a href="https://tripmark.netlify.app" target="_blank" rel="noopener noreferrer" className="portfolio__link">
           <div className="portfolio__card">
-            <img src="/assets/project3.jpg" alt="portfolio" />
-            <h3>Emergency_Dashboard</h3>
+            <img src="/assets/project2.jpg" alt="Trip Mark" />
+            <h3>Trip Mark</h3>
           </div>
+        </a>
+        <a href="https://abs-company-spa.netlify.app" target="_blank" rel="noopener noreferrer" className="portfolio__link">
+           <div className="portfolio__card">
+          <img src="/assets/project1.jpg" alt="ABS Construction" />
+          <h3>ABS建設会社 公式サイト</h3>
+          </div>
+        </a>
+        <a href="https://github.com/your-username/emergency-dashboard" target="_blank" rel="noopener noreferrer" className="portfolio__link">
           <div className="portfolio__card">
-            <img src="/assets/project2.jpg" alt="portfolio" />
-            <h3>Trip mark</h3>
+            <img src="/assets/project3.jpg" alt="Emergency Dashboard" />
+            <h3>Emergency Dashboard</h3>
           </div>
-          <div className="portfolio__card">
-            <img src="/assets/project1.jpg" alt="portfolio" />
-            <h3>ABS建設会社 公式サイト</h3>
-          </div>
-        </div>
-      </section>
+        </a>
+      </div>
+    </section>
 
       {/* Contact Section */}
       <section className="section__container contact__container" id="contact">
